@@ -1,0 +1,76 @@
+body {
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 59%,
+    rgb(175, 219, 236) 27%,
+    rgba(24, 122, 202, 0.632),
+    rgb(5, 87, 117) 80%
+  );
+
+  header {
+    font-family: "Space Grotesk", sans-serif;
+  }
+  .center {
+    text-align: center;
+  }
+
+  section {
+    margin-bottom: 30px;
+  }
+}
+
+h2.bio {
+  font-family: "Science Gothic", sans-serif;
+  color: rgb(51, 105, 56);
+  position: relative;
+  width: max-content;
+  margin: auto;
+  padding-bottom: 5px;
+
+  &::after {
+    content: "";
+    background: linear-gradient(to right, rgb(2, 52, 2), rgb(90, 186, 138), rgb(65, 199, 177));
+    width: 0%;
+    height: 4px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 10px;
+    transition: 300ms ease-in-out;
+  }
+
+  &:hover {
+    color: rgba(58, 122, 61, 0.6);
+    & + table {
+      font-weight: 700;
+      color: rgb(45, 44, 43);
+
+      .nickname {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+header > img {
+  border-radius: 50%;
+
+  &:hover {
+    border: 3px solid blue;
+  }
+}
+
+hr {
+  border: none;
+  height: 5px;
+  background: #89234f;
+  margin: 20px 0;
+}
+
+* {
+  box-sizing: border-box;
+}
