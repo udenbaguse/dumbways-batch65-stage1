@@ -1,0 +1,208 @@
+body {
+  background: radial-gradient(
+    circle at 50% 59%,
+    rgb(175, 219, 236) 27%,
+    rgba(24, 122, 202, 0.632),
+    rgb(5, 87, 117) 80%
+  );
+  height: 100vh;
+}
+
+.card {
+  margin: auto;
+  margin-top: 25vh;
+  max-width: 800px;
+  height: 60vh;
+  background: grey;
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 500%;
+    background: linear-gradient( 180deg, rgb(244, 0, 175), rgb(130, 4, 255));
+    height: 50%;
+    animation: rotBGimg 4s linear infinite;
+    transition: all 0.2 linear;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    background: #1a1d20;
+    inset: 7px;
+    border-radius: 15px;
+  }
+
+  /* for all element in the card component */
+  * {
+    z-index: 1; /* to make the element appear in front(::after)*/
+    color: white;
+  }
+
+  /* card image start */
+  .card-image {
+    width: 30%;
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    background: #2d2d2d;
+    order: 1;
+    text-align: center;
+
+    .profile {
+      border-radius: 10%;
+      width: 150px;
+      height: 150px;
+    }
+
+    h3 {
+      font-family: "Playfair", serif;
+    }
+  }
+  /* card image end */
+
+  /* card content start */
+  .card-content {
+    width: 40%;
+    text-align: center;
+
+    h2 {
+      font-family: "Raleway", sans-serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    p {
+      font-family: "Noto Sans Georgian", sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      text-align: justify;
+    }
+    .container-buttons-icons {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      /* card buttons start */
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+
+        .contact {
+          background: linear-gradient(135deg, #667eea 0%, #0e18a4 100%);
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 12px 24px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+          }
+        }
+
+        .download {
+          background: transparent;
+          color: whitesmoke;
+          border: 2px solid skyblue;
+          border-radius: 10px;
+          padding: 10px 20px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: blueviolet;
+            color: white;
+          }
+        }
+      }
+      /* card buttons end */
+
+      .icons {
+        display: flex;
+        font-size: 2rem;
+        justify-content: center;
+      }
+    }
+  }
+  /* card content end */
+}
+
+/* line animation */
+@keyframes rotBGimg {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* responsive for mobile & tablet */
+@media (width <= 768px) {
+  .card {
+    margin-top: 10vh;
+    height: 90vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    .card-content {
+      text-align: center;
+      width: 90%;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        text-align: left;
+        font-size: 1rem;
+      }
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+
+        button {
+          width: 100%;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .card-image {
+      width: 95%;
+      padding-top: 20px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #2d2d2d;
+      order: 1;
+      text-align: center;
+
+      .profile {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+}
