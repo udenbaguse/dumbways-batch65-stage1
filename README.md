@@ -2,7 +2,7 @@
 
 Repositori ini berisi kumpulan tugas harian selama mengikuti program **Fullstack Web Developer** di **DumbWays Batch 65 (Stage 1)**.
 
-## 👤 Profil Mahasiswa
+## 👤 Profil Siswa
 
 - **Nama:** Muhamad Syamsudin (Syam)
 - **Asal:** Prambanan
