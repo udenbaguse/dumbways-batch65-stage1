@@ -1,4 +1,3 @@
-// projects.js
 import { showAlert } from "./alert.js";
 import { validateForm, setupRealtimeValidation } from "./validation.js";
 import { saveProjects, loadProjects } from "./storage.js";
