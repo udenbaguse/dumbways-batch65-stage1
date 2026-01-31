@@ -4,6 +4,7 @@ import { validateForm, setupRealtimeValidation } from "./validation.js";
 import { saveProjects, loadProjects } from "./storage.js";
 import { createProjectCard } from "./templateCard.js";
 import { getBase64 } from "./base64.js";
+import { generateProjectId } from "./generateId.js";
 
 /* ================= CONSTANTS ================= */
 const SELECTORS = {
@@ -88,11 +89,6 @@ function validateTechnologies(technologies) {
   return true;
 }
 
-function generateProjectId(projects) {
-  if (!projects.length) return 1;
-  const maxId = Math.max(...projects.map((p) => Number(p.id) || 0));
-  return maxId + 1;
-}
 
 function createProjectObject() {
   return {
