@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box !important;
+}
+
+/* card container */
+.card_max_width {
+    width: 90% !important;
+    max-width: 800px !important;
+}
+
+/* grow and shrink basis*/
+.card_image_grow_shrink_basis {
+    flex: 1 1 250px;
+}
+
+.card_content_grow_shrink_basis {
+    flex: 2 1 400px;
+}
+
+/* google font */
+.font_railway {
+    font-family: "Raleway", sans-serif;
+}
+
+.font_ns_georgian {
+    font-family: "Noto Sans Georgian", sans-serif;
+}
+
+.font_playfair {
+    font-family: "Playfair", serif;
+}
+
+/* style for icon from font awesome */
+.social_icons a {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    transition: transform 5s;
+}
+
+/* other style */
+.card_box_shadow {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.border_img {
+    border-radius: 50%;
+}
+
+.alert-fixed {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1050;
+}

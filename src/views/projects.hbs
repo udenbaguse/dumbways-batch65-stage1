@@ -1,0 +1,115 @@
+<div class="container mt-3 mb-2">
+  <h1 class="text-center py-3">ADD MY PROJECT</h1>
+
+  <div id="projectForm" class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="form-group pb-2">
+        <label for="projectName">Project Name</label>
+        <input type="text" class="form-control" id="projectName" required />
+        <div class="invalid-feedback">Project name is required</div>
+      </div>
+
+      <div class="form-group pb-2">
+        <label for="startDate">Start Date</label>
+        <input type="date" class="form-control" id="startDate" required />
+        <div class="invalid-feedback">Start date is required</div>
+      </div>
+
+      <div class="form-group pb-2">
+        <label for="endDate">End Date</label>
+        <input type="date" class="form-control" id="endDate" required />
+        <div class="invalid-feedback">End date is required</div>
+      </div>
+
+      <div class="form-group pb-2">
+        <label for="description">Description <i>(optional)</i></label>
+        <textarea class="form-control" id="description" rows="3"></textarea>
+        <div class="invalid-feedback">Description is required</div>
+      </div>
+
+      <div class="form-group pb-2">
+        <label>Technologies</label>
+        <div id="techGroup">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input tech-checkbox"
+              type="checkbox"
+              id="checkVue"
+              value="<i class='devicon-vuejs-plain colored' style='font-size: 1.5rem;'></i>"
+            />
+            <label class="form-check-label" for="checkVue">Vue</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input tech-checkbox"
+              type="checkbox"
+              id="checkAngular"
+              value="<i class='devicon-angular-plain colored' style='font-size: 1.5rem;'></i>"
+            />
+            <label class="form-check-label" for="checkAngular">Angular</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input tech-checkbox"
+              type="checkbox"
+              id="checkReact"
+              value="<i class='devicon-react-original colored' style='font-size: 1.5rem;'></i>"
+            />
+            <label class="form-check-label" for="checkReact">React</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input tech-checkbox"
+              type="checkbox"
+              id="checkJS"
+              value="<i class='devicon-javascript-plain colored' style='font-size: 1.5rem;'></i>"
+            />
+            <label class="form-check-label" for="checkJS">JavaScript</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input tech-checkbox"
+              type="checkbox"
+              value="<i class='devicon-typescript-plain colored' style='font-size: 1.5rem;'></i>"
+            />
+            <label class="form-check-label">TypeScript</label>
+          </div>
+        </div>
+
+        <div class="invalid-feedback d-block" id="techFeedback">Please select at
+          least one technology</div>
+      </div>
+
+      <div class="form-group pb-2">
+        <label for="uploadImage">Upload Image <i>(optional)</i></label>
+        <input
+          type="file"
+          class="form-control"
+          id="uploadImage"
+          accept="image/*"
+        />
+        <div class="invalid-feedback">Project image is required</div>
+      </div>
+
+      <div class="text-end pb-4">
+        <button type="button" class="btn btn-info" id="submitBtn">Save Project</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-center mt-4">MY PROJECT</h2>
+
+  <div class="container my-5">
+    <div class="row g-4" id="root">
+      <!-- Cards Project -->
+    </div>
+  </div>
+
+  <!-- Modal omitted for brevity; client-side JS handles edit modal -->
+</div>
+
+<script type="module" src="/js/actions/projects.js"></script>
+<script type="module" src="/js/forms/my-project-form-submit.js"></script>

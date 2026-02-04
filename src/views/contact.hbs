@@ -1,0 +1,79 @@
+<div class="container mt-5 mb-5">
+  <div id="alertBox" class="alert d-none text-center" role="alert"></div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h2 class="mb-4 text-center">Order a Website According to Your Needs</h2>
+
+      <div class="p-4 border rounded shadow-sm bg-body-tertiary">
+        <form id="formNama" novalidate>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Fullname"
+              name="nama"
+              required
+            />
+            <div class="invalid-feedback">Name is required.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="name@example.com"
+              required
+            />
+            <div class="invalid-feedback">Enter a valid email using @</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+              placeholder="08123456789"
+              required
+            />
+            <div class="invalid-feedback">Phone number is required.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="subject" class="form-label">Website Design</label>
+            <select class="form-select" id="subject" required>
+              <option value="" selected>Portofolio</option>
+              <option value="Inquiry">Ecommerce</option>
+              <option value="Support">Mobile App</option>
+              <option value="Other">Other</option>
+            </select>
+            <div class="invalid-feedback">Must select one design</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="message" class="form-label">Notes</label>
+            <textarea
+              class="form-control"
+              id="message"
+              rows="4"
+              placeholder="Describe what kind of website you want to order..."
+              required
+            ></textarea>
+            <div class="invalid-feedback">Notes cannt be empty.</div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary px-4">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/forms/contact-me-form-submit.js"></script>
