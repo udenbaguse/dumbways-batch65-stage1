@@ -1,57 +1,84 @@
-# dumbways-batch65-stage1
+# Dumbways Batch 65 Stage 1
 
-Tugas hari ke-8: aplikasi Express + Handlebars (HBS) dengan layout dan partials.
+Tugas hari ke-8 - A simple web application built with Node.js, Express, and Handlebars.
 
-## Ringkas
-- Templating HBS dengan layout `main.hbs`
-- Partial navbar (`navbar.hbs`)
-- Static assets dari folder `public`
+## Description
 
-## Tech Stack
-- Node.js + Express
-- Handlebars (`hbs` + `express-handlebars`)
-- Nodemon (dev)
+This project is a basic web application that includes pages for home, my projects, project details, contact me, and a 404 error page. It demonstrates the use of Express.js with Handlebars templating engine for server-side rendering.
 
-## Struktur Folder
-- `app.js` - entry server Express
-- `public/` - CSS/JS/asset statis
-- `src/` - source utama
-- `src/controllers/` - controller handler
-- `src/db/` - konfigurasi/akses database
-- `src/middlewares/` - middleware Express
-- `src/repositories/` - data access layer
-- `src/routes/` - definisi routes
-- `src/services/` - business logic
-- `src/validators/` - validasi request
-- `src/views/` - file HBS
-- `src/views/layouts/` - layout (`main.hbs`)
-- `src/views/partials/` - partials (`navbar.hbs`)
+## Installation
 
-## Cara Menjalankan
-1. Install dependencies
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/udenbaguse/dumbways-batch65-stage1.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd dumbways-batch65-stage1
+   ```
+
+3. Install dependencies:
    ```bash
    npm install
    ```
-2. Jalankan server
-   ```bash
-   npm run dev
-   ```
-3. Buka browser
-   - `http://localhost:3000/`
 
-## Routes
-- `/` -> `home.hbs`
-- `/projects` -> `projects.hbs`
-- `/project-detail` -> `project-detail.hbs`
-- `/contact` -> `contact.hbs`
+## Usage
 
-## Catatan
-Jika CSS/Bootstrap tidak tampil, pastikan:
-- Server berjalan dengan `npm run dev`
-- Akses halaman lewat `http://localhost:3000/...` (bukan file HTML/HBS langsung)
+To run the application in development mode:
 
-## Lisensi
-ISC
+```bash
+npm run dev
+```
 
----
-Author: Syam
+The server will start on `http://localhost:3000`.
+
+## Project Structure
+
+```
+dumbways-batch65-stage1/
+├── app.js                 # Main application file
+├── package.json           # Project dependencies and scripts
+├── public/                # Static files (CSS, JS)
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       ├── actions/
+│       ├── components/
+│       ├── forms/
+│       ├── pages/
+│       └── utils/
+├── src/
+│   ├── controllers/
+│   │   └── pageController.js
+│   ├── routes/
+│   │   └── pageRoutes.js
+│   └── views/
+│       ├── layouts/
+│       │   └── main.hbs
+│       ├── partials/
+│       │   └── navbar.hbs
+│       └── *.hbs (page templates)
+└── README.md
+```
+
+## Technologies Used
+
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web application framework
+- **Handlebars** - Templating engine
+- **express-handlebars** - Handlebars view engine for Express
+
+## Scripts
+
+- `npm run dev` - Start the development server with nodemon
+
+## License
+
+All Rights Reserved
+
+## Author
+
+Syam
