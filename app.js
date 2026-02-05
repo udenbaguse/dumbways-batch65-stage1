@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { engine } from "express-handlebars";
+import pageRoutes from "./src/routes/pageRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,28 +24,7 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src/views"));
 
 app.use(express.static(path.join(__dirname, "public")));
-
-// Routes
-app.get("/", (req, res) => {
-  res.render("home", { title: "Home" });
-});
-
-app.get("/projects", (req, res) => {
-  res.render("projects", { title: "Projects" });
-});
-
-app.get("/project-detail", (req, res) => {
-  res.render("project-detail", { title: "Project Detail" });
-});
-
-app.get("/contact", (req, res) => {
-  res.render("contact", { title: "Contact" });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render("404", { title: "Page Not Found" });
-});
+app.use("/", pageRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
