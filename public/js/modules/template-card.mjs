@@ -28,7 +28,7 @@ export function createProjectCard(project) {
 
     <div class="mt-auto">
       <a
-        href="/project-detail?id=${project.id}"
+        href="my-project-details.html?id=${project.id}"
         class="btn btn-primary btn-sm w-100 mb-2"
       >
         Detail
@@ -54,3 +54,4 @@ export function createProjectCard(project) {
 
   return card;
 }
+

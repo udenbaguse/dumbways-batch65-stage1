@@ -1,7 +1,6 @@
-import { showAlert } from "./../utils/alert.js";
-import { saveProjects } from "./../utils/storage.js";
-import { projects, renderProjects } from "./delete-card.js";
-import { getBase64 } from "./../utils/base64.js";
+import { showAlert } from "../utils/alert.mjs";
+import { projects, renderProjects } from "../modules/delete-card.js";
+import { getBase64 } from "../utils/base64.mjs";
 
 // Modal elements
 const editModal = new bootstrap.Modal(
@@ -74,7 +73,6 @@ saveChangesBtn.addEventListener("click", () => {
       image: selectedImage || projects[projectIndex].image,
     };
 
-    saveProjects(projects);
     renderProjects();
     editModal.hide();
 
@@ -92,3 +90,4 @@ function getSelectedEditTechnologies() {
     (cb) => cb.value,
   );
 }
+

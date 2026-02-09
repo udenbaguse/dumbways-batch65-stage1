@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/udenbaguse/dumbways-batch65-stage1.git"
   },
-  "license": "All Rights Reserved",
+  "license": "ISC",
   "author": "Syam",
   "type": "module",
   "main": "app.js",

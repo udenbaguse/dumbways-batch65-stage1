@@ -3,7 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const projectId = parseInt(urlParams.get("id"));
 
 // get project from local storage
-let projects = JSON.parse(localStorage.getItem("projects")) || [];
+let projects = [];
 
 // find project by ID
 const project = projects.find((p) => p.id === projectId);

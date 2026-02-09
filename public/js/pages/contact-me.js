@@ -1,8 +1,8 @@
-import { showAlert } from "./../utils/alert.js";
+import { showAlert } from "../utils/alert.mjs";
 import {
   validateForm,
   setupRealtimeValidation,
-} from "./../utils/validation.js";
+} from "../utils/validation.mjs";
 
 const form = document.getElementById("formNama");
 const alertBox = document.getElementById("alertBox");
@@ -31,3 +31,4 @@ form.addEventListener("submit", (e) => {
     });
   }
 });
+
