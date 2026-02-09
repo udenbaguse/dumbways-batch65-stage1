@@ -1,57 +1,75 @@
-# dumbways-batch65-stage1
+# Dumbways Batch 65 - Stage 1 (Personal Web)
 
-Tugas hari ke-8: aplikasi Express + Handlebars (HBS) dengan layout dan partials.
+A simple personal web app built with Express + Handlebars and PostgreSQL.  
+Features include project CRUD, detail page, and tech icons using Devicon.
 
-## Ringkas
-- Templating HBS dengan layout `main.hbs`
-- Partial navbar (`navbar.hbs`)
-- Static assets dari folder `public`
+## Features
+- Home, My Projects, Contact
+- List projects from PostgreSQL
+- Create, Update, Delete project
+- Project detail by ID
+- Tech icons rendered from `technologies.icon_html`
 
 ## Tech Stack
-- Node.js + Express
-- Handlebars (`hbs` + `express-handlebars`)
-- Nodemon (dev)
+- Node.js, Express
+- Handlebars (express-handlebars)
+- PostgreSQL (pg)
+- Bootstrap 5
 
-## Struktur Folder
-- `app.js` - entry server Express
-- `public/` - CSS/JS/asset statis
-- `src/` - source utama
-- `src/controllers/` - controller handler
-- `src/db/` - konfigurasi/akses database
-- `src/middlewares/` - middleware Express
-- `src/repositories/` - data access layer
-- `src/routes/` - definisi routes
-- `src/services/` - business logic
-- `src/validators/` - validasi request
-- `src/views/` - file HBS
-- `src/views/layouts/` - layout (`main.hbs`)
-- `src/views/partials/` - partials (`navbar.hbs`)
+## Requirements
+- Node.js >= 18
+- PostgreSQL + pgAdmin
 
-## Cara Menjalankan
+## Setup
 1. Install dependencies
-   ```bash
-   npm install
-   ```
-2. Jalankan server
-   ```bash
-   npm run dev
-   ```
-3. Buka browser
-   - `http://localhost:3000/`
+```bash
+npm install
+```
+
+2. Create `.env` in project root
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=personal-web-65
+DB_USER=postgres
+DB_PASSWORD=root
+DEFAULT_USER_ID=1
+```
+
+3. Run the app
+```bash
+npm run dev
+```
+
+App runs on `http://localhost:3000`.
+
+## Database Notes
+This app expects these tables:
+- `users`
+- `projects`
+- `technologies`
+- `project_technologies`
+
+Important columns used by the app:
+- `projects.image` (string)
+- `technologies.icon_html` (string) for Devicon HTML
+
+Example `technologies.icon_html` value:
+```
+<i class="devicon-react-original colored" style="font-size: 1.5rem;"></i>
+```
 
 ## Routes
-- `/` -> `home.hbs`
-- `/projects` -> `projects.hbs`
-- `/project-detail` -> `project-detail.hbs`
-- `/contact` -> `contact.hbs`
+- `GET /` Home
+- `GET /projects` My Projects
+- `POST /projects` Create project
+- `PUT /projects/:id` Update project
+- `DELETE /projects/:id` Delete project
+- `GET /project-detail/:id` Project detail
 
-## Catatan
-Jika CSS/Bootstrap tidak tampil, pastikan:
-- Server berjalan dengan `npm run dev`
-- Akses halaman lewat `http://localhost:3000/...` (bukan file HTML/HBS langsung)
+## Scripts
+- `npm run dev` Start dev server with nodemon
 
-## Lisensi
-ISC
-
----
-Author: Syam
+## Notes
+- Image upload is not implemented yet. `image` is stored as URL/string.
+- If you see foreign key errors, ensure `DEFAULT_USER_ID` exists in `users`.
