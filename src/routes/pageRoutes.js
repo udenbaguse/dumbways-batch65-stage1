@@ -6,6 +6,7 @@ import {
   renderProjectDetail,
   renderProjects,
   createProject,
+  updateProject,
 } from "../controllers/pageController.js";
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.get("/", renderHome);
 router.get("/projects", renderProjects);
 router.post("/projects", createProject);
+router.put("/projects/:id", updateProject);
 router.get("/project-detail/:id", renderProjectDetail);
 router.get("/contact", renderContact);
 

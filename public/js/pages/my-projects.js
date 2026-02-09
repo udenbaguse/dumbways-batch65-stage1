@@ -19,6 +19,8 @@ const editStartDate = document.getElementById("editStartDate");
 const editEndDate = document.getElementById("editEndDate");
 const editDescription = document.getElementById("editDescription");
 const editTechCheckboxes = document.querySelectorAll(".edit-tech-checkbox");
+const editUploadImage = document.getElementById("editUploadImage");
+const saveChangesBtn = document.getElementById("saveChangesBtn");
 const rootContainer = document.getElementById("root");
 
 if (container && submitBtn) {
@@ -118,5 +120,53 @@ if (editModalEl && rootContainer) {
 
     editModal.show();
   });
+
+  if (saveChangesBtn) {
+    saveChangesBtn.addEventListener("click", async () => {
+      const projectId = editProjectId?.value;
+      if (!projectId) return;
+
+      const selectedTechs = Array.from(editTechCheckboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+
+      const payload = {
+        name: editProjectName?.value || "",
+        startDate: editStartDate?.value || "",
+        endDate: editEndDate?.value || "",
+        description: editDescription?.value || "",
+        technologies: selectedTechs,
+        imagePath: editUploadImage?.value || "",
+      };
+
+      try {
+        saveChangesBtn.disabled = true;
+        const response = await fetch(`/projects/${projectId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Failed to update project.");
+        }
+
+        editModal.hide();
+        setTimeout(() => {
+          window.location.reload();
+        }, 400);
+      } catch (error) {
+        showAlert({
+          alertBox,
+          type: "danger",
+          message: `<strong>Failed!</strong> ${error.message}`,
+        });
+      } finally {
+        saveChangesBtn.disabled = false;
+      }
+    });
+  }
 }
 

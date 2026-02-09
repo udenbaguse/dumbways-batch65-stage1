@@ -174,6 +174,109 @@ export const createProject = async (req, res) => {
   }
 };
 
+export const updateProject = async (req, res) => {
+  const projectId = Number(req.params.id || 0);
+  if (!projectId) {
+    return res.status(400).json({
+      success: false,
+      message: "ID project tidak valid.",
+    });
+  }
+
+  const { name, startDate, endDate, description, technologies, imagePath } =
+    req.body || {};
+
+  const trimmedName = String(name || "").trim();
+  const trimmedDescription = String(description || "").trim();
+  const techList = Array.isArray(technologies)
+    ? technologies
+    : typeof technologies === "string" && technologies.length > 0
+      ? [technologies]
+      : [];
+  const normalizedTechList = techList
+    .map((tech) => String(tech || "").trim())
+    .filter(Boolean)
+    .map((tech) => tech.toLowerCase());
+
+  if (!trimmedName || !startDate || !endDate || normalizedTechList.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Field wajib belum lengkap.",
+    });
+  }
+
+  const client = await db.connect();
+  try {
+    await client.query("BEGIN");
+
+    await client.query(
+      `
+      UPDATE projects
+      SET name = $1,
+          start_date = $2,
+          end_date = $3,
+          description = $4,
+          image = $5,
+          updated_at = NOW()
+      WHERE id = $6
+      `,
+      [
+        trimmedName,
+        startDate,
+        endDate,
+        trimmedDescription || null,
+        imagePath || null,
+        projectId,
+      ]
+    );
+
+    await client.query(
+      `
+      DELETE FROM project_technologies
+      WHERE project_id = $1
+      `,
+      [projectId]
+    );
+
+    const techRows = await client.query(
+      `
+      SELECT id, name
+      FROM technologies
+      WHERE LOWER(name) = ANY($1)
+      `,
+      [normalizedTechList]
+    );
+
+    if (techRows.rows.length !== normalizedTechList.length) {
+      throw new Error("Beberapa teknologi tidak ditemukan di database.");
+    }
+
+    const values = techRows.rows
+      .map((row, index) => `($1, $${index + 2})`)
+      .join(", ");
+
+    await client.query(
+      `
+      INSERT INTO project_technologies (project_id, technology_id)
+      VALUES ${values}
+      `,
+      [projectId, ...techRows.rows.map((row) => row.id)]
+    );
+
+    await client.query("COMMIT");
+    return res.json({ success: true });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Failed to update project:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Gagal update project.",
+    });
+  } finally {
+    client.release();
+  }
+};
+
 export const renderProjectDetail = async (req, res) => {
   const projectId = Number(req.params.id || 0);
   if (!projectId) {
