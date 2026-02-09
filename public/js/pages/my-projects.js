@@ -22,6 +22,9 @@ const editTechCheckboxes = document.querySelectorAll(".edit-tech-checkbox");
 const editUploadImage = document.getElementById("editUploadImage");
 const saveChangesBtn = document.getElementById("saveChangesBtn");
 const rootContainer = document.getElementById("root");
+const confirmUpdateModalEl = document.getElementById("confirmUpdateModal");
+const confirmYesBtn = document.getElementById("confirmYesBtn");
+const confirmNoBtn = document.getElementById("confirmNoBtn");
 
 if (container && submitBtn) {
   setupRealtimeValidation(container);
@@ -93,6 +96,10 @@ if (container && submitBtn) {
 
 if (editModalEl && rootContainer) {
   const editModal = new bootstrap.Modal(editModalEl);
+  const confirmUpdateModal = confirmUpdateModalEl
+    ? new bootstrap.Modal(confirmUpdateModalEl)
+    : null;
+  let pendingUpdate = null;
 
   rootContainer.addEventListener("click", (event) => {
     const target = event.target;
@@ -148,7 +155,7 @@ if (editModalEl && rootContainer) {
   });
 
   if (saveChangesBtn) {
-    saveChangesBtn.addEventListener("click", async () => {
+    saveChangesBtn.addEventListener("click", () => {
       const projectId = editProjectId?.value;
       if (!projectId) return;
 
@@ -156,7 +163,8 @@ if (editModalEl && rootContainer) {
         .filter((cb) => cb.checked)
         .map((cb) => cb.value);
 
-      const payload = {
+      pendingUpdate = {
+        projectId,
         name: editProjectName?.value || "",
         startDate: editStartDate?.value || "",
         endDate: editEndDate?.value || "",
@@ -165,8 +173,24 @@ if (editModalEl && rootContainer) {
         imagePath: editUploadImage?.value || "",
       };
 
+      if (confirmUpdateModal) confirmUpdateModal.show();
+    });
+  }
+
+  if (confirmNoBtn && confirmUpdateModal) {
+    confirmNoBtn.addEventListener("click", () => {
+      confirmUpdateModal.hide();
+      pendingUpdate = null;
+    });
+  }
+
+  if (confirmYesBtn && confirmUpdateModal) {
+    confirmYesBtn.addEventListener("click", async () => {
+      if (!pendingUpdate) return;
+      const { projectId, ...payload } = pendingUpdate;
+
       try {
-        saveChangesBtn.disabled = true;
+        confirmYesBtn.disabled = true;
         const response = await fetch(`/projects/${projectId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -179,6 +203,7 @@ if (editModalEl && rootContainer) {
           throw new Error(result.message || "Failed to update project.");
         }
 
+        confirmUpdateModal.hide();
         editModal.hide();
         setTimeout(() => {
           window.location.reload();
@@ -190,7 +215,7 @@ if (editModalEl && rootContainer) {
           message: `<strong>Failed!</strong> ${error.message}`,
         });
       } finally {
-        saveChangesBtn.disabled = false;
+        confirmYesBtn.disabled = false;
       }
     });
   }
