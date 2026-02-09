@@ -1,18 +1,42 @@
-<div class="container mt-4">
-  <div class="card bg-dark text-light">
-    <img
-      src="{{project.image}}"
-      class="card-img-top"
-      style="height:300px; object-fit:cover;"
-    />
-    <div class="card-body">
-      <h3 class="card-title">{{project.name}}</h3>
-      <p class="small text-muted">{{formatDate project.startDate}}
-        -
-        {{formatDate project.endDate}}</p>
-      <p>{{project.description}}</p>
-      <p class="small">Technologies: {{{join project.technologies}}}</p>
-      <a href="/projects" class="btn btn-secondary">Back</a>
+<div class="container mt-5">
+  {{#if dbError}}
+    <div class="alert alert-danger">Gagal memuat detail project.</div>
+  {{else if notFound}}
+    <div class="alert alert-warning">Project tidak ditemukan.</div>
+  {{else}}
+    <h1 class="mb-4">{{project.name}}</h1>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <img
+          src="{{project.image}}"
+          class="img-fluid rounded shadow"
+          style="width: 100%; height: 350px; object-fit: cover"
+          alt="{{project.name}}"
+        />
+      </div>
+
+      <div class="col-lg-5">
+        <h4 class="fw-bold mb-3">Duration</h4>
+        <p class="mb-1">
+          <i class="fa-regular fa-calendar-days me-2"></i>
+          {{formatDate project.startDate}} - {{formatDate project.endDate}}
+        </p>
+        <p>
+          <i class="fa-solid fa-hourglass-half me-2"></i>
+          {{calculateDate project.startDate project.endDate}}
+        </p>
+
+        <h4 class="fw-bold mt-4 mb-3">Technologies</h4>
+        <div class="tech-list">{{{join project.technologies}}}</div>
+      </div>
     </div>
-  </div>
+
+    <div class="mt-5">
+      <h3 class="fw-bold">Description</h3>
+      <p class="project-description">{{project.description}}</p>
+    </div>
+  {{/if}}
+
+  <a href="/projects" class="btn btn-secondary mt-4">Back</a>
 </div>

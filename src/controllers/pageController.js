@@ -167,8 +167,67 @@ export const createProject = async (req, res) => {
   }
 };
 
-export const renderProjectDetail = (req, res) => {
-  renderPage(res, "project-detail", "Project Detail");
+export const renderProjectDetail = async (req, res) => {
+  const projectId = Number(req.params.id || 0);
+  if (!projectId) {
+    res.status(400);
+    return renderPage(res, "project-detail", "Project Detail", {
+      project: null,
+      dbError: true,
+    });
+  }
+
+  try {
+    const result = await db.query(
+      `
+      SELECT
+        p.id,
+        p.name,
+        p.start_date,
+        p.end_date,
+        p.description,
+        p.image,
+        COALESCE(
+          ARRAY_AGG(t.name ORDER BY t.name) FILTER (WHERE t.name IS NOT NULL),
+          '{}'
+        ) AS technologies
+      FROM projects p
+      LEFT JOIN project_technologies pt ON pt.project_id = p.id
+      LEFT JOIN technologies t ON t.id = pt.technology_id
+      WHERE p.id = $1
+      GROUP BY p.id
+      `,
+      [projectId]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404);
+      return renderPage(res, "project-detail", "Project Detail", {
+        project: null,
+        notFound: true,
+      });
+    }
+
+    const row = result.rows[0];
+    const project = {
+      id: row.id,
+      name: row.name,
+      startDate: row.start_date,
+      endDate: row.end_date,
+      description: row.description,
+      image: row.image || "https://via.placeholder.com/800x400?text=Project+Image",
+      technologies: row.technologies || [],
+    };
+
+    return renderPage(res, "project-detail", "Project Detail", { project });
+  } catch (error) {
+    console.error("Failed to load project detail:", error);
+    res.status(500);
+    return renderPage(res, "project-detail", "Project Detail", {
+      project: null,
+      dbError: true,
+    });
+  }
 };
 
 export const renderContact = (req, res) => {
