@@ -20,7 +20,7 @@ export const renderProjects = async (req, res) => {
         p.description,
         p.image,
         COALESCE(
-          ARRAY_AGG(t.name ORDER BY t.name) FILTER (WHERE t.name IS NOT NULL),
+          ARRAY_AGG(t.icon_html ORDER BY t.name) FILTER (WHERE t.icon_html IS NOT NULL),
           '{}'
         ) AS technologies
       FROM projects p
@@ -40,8 +40,8 @@ export const renderProjects = async (req, res) => {
       image:
         row.image || "https://via.placeholder.com/800x400?text=Project+Image",
       technologies: row.technologies || [],
-      techList: (row.technologies || []).join(", "),
-      techCsv: (row.technologies || []).join(","),
+      techIcons: row.technologies || [],
+      techIconsCsv: (row.technologies || []).join(","),
       startDateISO: row.start_date
         ? new Date(row.start_date).toISOString().slice(0, 10)
         : "",
@@ -91,8 +91,7 @@ export const createProject = async (req, res) => {
       : [];
   const normalizedTechList = techList
     .map((tech) => String(tech || "").trim())
-    .filter(Boolean)
-    .map((tech) => tech.toLowerCase());
+    .filter(Boolean);
 
   if (!trimmedName || !startDate || !endDate || normalizedTechList.length === 0) {
     return res.status(400).json({
@@ -138,7 +137,7 @@ export const createProject = async (req, res) => {
         `
         SELECT id, name
         FROM technologies
-        WHERE LOWER(name) = ANY($1)
+        WHERE icon_html = ANY($1)
         `,
         [normalizedTechList]
       );
@@ -195,8 +194,7 @@ export const updateProject = async (req, res) => {
       : [];
   const normalizedTechList = techList
     .map((tech) => String(tech || "").trim())
-    .filter(Boolean)
-    .map((tech) => tech.toLowerCase());
+    .filter(Boolean);
 
   if (!trimmedName || !startDate || !endDate || normalizedTechList.length === 0) {
     return res.status(400).json({
@@ -242,7 +240,7 @@ export const updateProject = async (req, res) => {
       `
       SELECT id, name
       FROM technologies
-      WHERE LOWER(name) = ANY($1)
+      WHERE icon_html = ANY($1)
       `,
       [normalizedTechList]
     );
@@ -349,7 +347,7 @@ export const renderProjectDetail = async (req, res) => {
         p.description,
         p.image,
         COALESCE(
-          ARRAY_AGG(t.name ORDER BY t.name) FILTER (WHERE t.name IS NOT NULL),
+          ARRAY_AGG(t.icon_html ORDER BY t.name) FILTER (WHERE t.icon_html IS NOT NULL),
           '{}'
         ) AS technologies
       FROM projects p

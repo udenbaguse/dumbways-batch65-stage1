@@ -36,7 +36,7 @@
               class="form-check-input tech-checkbox"
               type="checkbox"
               id="checkVue"
-              value="Vue"
+              value='<i class="devicon-vuejs-plain colored" style="font-size: 1.5rem;"></i>'
             />
             <label class="form-check-label" for="checkVue">Vue</label>
           </div>
@@ -45,7 +45,7 @@
               class="form-check-input tech-checkbox"
               type="checkbox"
               id="checkAngular"
-              value="Angular"
+              value='<i class="devicon-angular-plain colored" style="font-size: 1.5rem;"></i>'
             />
             <label class="form-check-label" for="checkAngular">Angular</label>
           </div>
@@ -55,7 +55,7 @@
               class="form-check-input tech-checkbox"
               type="checkbox"
               id="checkReact"
-              value="React"
+              value='<i class="devicon-react-original colored" style="font-size: 1.5rem;"></i>'
             />
             <label class="form-check-label" for="checkReact">React</label>
           </div>
@@ -65,7 +65,7 @@
               class="form-check-input tech-checkbox"
               type="checkbox"
               id="checkJS"
-              value="JavaScript"
+              value='<i class="devicon-javascript-plain colored" style="font-size: 1.5rem;"></i>'
             />
             <label class="form-check-label" for="checkJS">JavaScript</label>
           </div>
@@ -74,7 +74,7 @@
             <input
               class="form-check-input tech-checkbox"
               type="checkbox"
-              value="TypeScript"
+              value='<i class="devicon-typescript-plain colored" style="font-size: 1.5rem;"></i>'
             />
             <label class="form-check-label">TypeScript</label>
           </div>
@@ -131,7 +131,7 @@
               <p class="card-text" style="height: 80px; overflow-y: auto;">
                 {{description}}
               </p>
-              <p class="small mb-3">Technologies: {{techList}}</p>
+              <p class="small mb-3">Technologies: {{{join techIcons " "}}}</p>
               <div class="mt-auto">
                 <a
                   href="/project-detail/{{id}}"
@@ -145,7 +145,7 @@
                     data-start="{{startDateISO}}"
                     data-end="{{endDateISO}}"
                     data-description="{{description}}"
-                    data-tech="{{techCsv}}"
+                    data-tech="{{techIconsCsv}}"
                     data-image="{{image}}"
                   >Edit</button>
                   <button
@@ -209,11 +209,11 @@
           <div class="form-group pb-2">
             <label>Technologies</label><br />
 
-            <div class="form-check form-check-inline">
+          <div class="form-check form-check-inline">
               <input
                 class="form-check-input edit-tech-checkbox"
                 type="checkbox"
-                value="Vue"
+                value='<i class="devicon-vuejs-plain colored" style="font-size: 1.5rem;"></i>'
                 id="editVue"
               />
               <label class="form-check-label" for="editVue">Vue</label>
@@ -223,7 +223,7 @@
               <input
                 class="form-check-input edit-tech-checkbox"
                 type="checkbox"
-                value="Angular"
+                value='<i class="devicon-angular-plain colored" style="font-size: 1.5rem;"></i>'
                 id="editAngular"
               />
               <label class="form-check-label" for="editAngular">Angular</label>
@@ -233,7 +233,7 @@
               <input
                 class="form-check-input edit-tech-checkbox"
                 type="checkbox"
-                value="React"
+                value='<i class="devicon-react-original colored" style="font-size: 1.5rem;"></i>'
                 id="editReact"
               />
               <label class="form-check-label" for="editReact">React</label>
@@ -243,7 +243,7 @@
               <input
                 class="form-check-input edit-tech-checkbox"
                 type="checkbox"
-                value="JavaScript"
+                value='<i class="devicon-javascript-plain colored" style="font-size: 1.5rem;"></i>'
                 id="editJS"
               />
               <label class="form-check-label" for="editJS">JavaScript</label>
@@ -253,7 +253,7 @@
               <input
                 class="form-check-input edit-tech-checkbox"
                 type="checkbox"
-                value="TypeScript"
+                value='<i class="devicon-typescript-plain colored" style="font-size: 1.5rem;"></i>'
                 id="editTS"
               />
               <label class="form-check-label" for="editTS">TypeScript</label>
