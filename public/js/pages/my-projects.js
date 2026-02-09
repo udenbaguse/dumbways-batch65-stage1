@@ -236,7 +236,14 @@ if (editModalEl && rootContainer) {
           throw new Error(result.message || "Failed to delete project.");
         }
         confirmDeleteModal.hide();
-        window.location.reload();
+        showAlert({
+          alertBox,
+          type: "success",
+          message: "<strong>Done!</strong> project deleted successfully.",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
       } catch (error) {
         showAlert({
           alertBox,
