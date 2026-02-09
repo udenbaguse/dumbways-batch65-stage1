@@ -25,6 +25,9 @@ const rootContainer = document.getElementById("root");
 const confirmUpdateModalEl = document.getElementById("confirmUpdateModal");
 const confirmYesBtn = document.getElementById("confirmYesBtn");
 const confirmNoBtn = document.getElementById("confirmNoBtn");
+const confirmDeleteModalEl = document.getElementById("confirmDeleteModal");
+const confirmDeleteYesBtn = document.getElementById("confirmDeleteYesBtn");
+const confirmDeleteNoBtn = document.getElementById("confirmDeleteNoBtn");
 
 if (container && submitBtn) {
   setupRealtimeValidation(container);
@@ -99,7 +102,11 @@ if (editModalEl && rootContainer) {
   const confirmUpdateModal = confirmUpdateModalEl
     ? new bootstrap.Modal(confirmUpdateModalEl)
     : null;
+  const confirmDeleteModal = confirmDeleteModalEl
+    ? new bootstrap.Modal(confirmDeleteModalEl)
+    : null;
   let pendingUpdate = null;
+  let pendingDeleteId = null;
 
   rootContainer.addEventListener("click", (event) => {
     const target = event.target;
@@ -131,26 +138,9 @@ if (editModalEl && rootContainer) {
     if (target.classList.contains("btn-delete")) {
       const projectId = target.dataset.id;
       if (!projectId) return;
-      if (!window.confirm("Hapus project ini?")) return;
 
-      (async () => {
-        try {
-          const response = await fetch(`/projects/${projectId}`, {
-            method: "DELETE",
-          });
-          const result = await response.json();
-          if (!response.ok || !result.success) {
-            throw new Error(result.message || "Failed to delete project.");
-          }
-          window.location.reload();
-        } catch (error) {
-          showAlert({
-            alertBox,
-            type: "danger",
-            message: `<strong>Failed!</strong> ${error.message}`,
-          });
-        }
-      })();
+      pendingDeleteId = projectId;
+      if (confirmDeleteModal) confirmDeleteModal.show();
     }
   });
 
@@ -205,9 +195,14 @@ if (editModalEl && rootContainer) {
 
         confirmUpdateModal.hide();
         editModal.hide();
+        showAlert({
+          alertBox,
+          type: "success",
+          message: "<strong>Done!</strong> project updated successfully.",
+        });
         setTimeout(() => {
           window.location.reload();
-        }, 400);
+        }, 800);
       } catch (error) {
         showAlert({
           alertBox,
@@ -216,6 +211,41 @@ if (editModalEl && rootContainer) {
         });
       } finally {
         confirmYesBtn.disabled = false;
+      }
+    });
+  }
+
+  if (confirmDeleteNoBtn && confirmDeleteModal) {
+    confirmDeleteNoBtn.addEventListener("click", () => {
+      confirmDeleteModal.hide();
+      pendingDeleteId = null;
+    });
+  }
+
+  if (confirmDeleteYesBtn && confirmDeleteModal) {
+    confirmDeleteYesBtn.addEventListener("click", async () => {
+      if (!pendingDeleteId) return;
+      const projectId = pendingDeleteId;
+      try {
+        confirmDeleteYesBtn.disabled = true;
+        const response = await fetch(`/projects/${projectId}`, {
+          method: "DELETE",
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Failed to delete project.");
+        }
+        confirmDeleteModal.hide();
+        window.location.reload();
+      } catch (error) {
+        showAlert({
+          alertBox,
+          type: "danger",
+          message: `<strong>Failed!</strong> ${error.message}`,
+        });
+      } finally {
+        confirmDeleteYesBtn.disabled = false;
+        pendingDeleteId = null;
       }
     });
   }
