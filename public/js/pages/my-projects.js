@@ -12,6 +12,14 @@ const startInput = document.getElementById("startDate");
 const endInput = document.getElementById("endDate");
 const descriptionInput = document.getElementById("description");
 const imageInput = document.getElementById("uploadImage");
+const editModalEl = document.getElementById("editProjectModal");
+const editProjectId = document.getElementById("editProjectId");
+const editProjectName = document.getElementById("editProjectName");
+const editStartDate = document.getElementById("editStartDate");
+const editEndDate = document.getElementById("editEndDate");
+const editDescription = document.getElementById("editDescription");
+const editTechCheckboxes = document.querySelectorAll(".edit-tech-checkbox");
+const rootContainer = document.getElementById("root");
 
 if (container && submitBtn) {
   setupRealtimeValidation(container);
@@ -78,6 +86,37 @@ if (container && submitBtn) {
     } finally {
       submitBtn.disabled = false;
     }
+  });
+}
+
+if (editModalEl && rootContainer) {
+  const editModal = new bootstrap.Modal(editModalEl);
+
+  rootContainer.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (!target.classList.contains("btn-edit")) return;
+
+    const techCsv = target.dataset.tech || "";
+    const techSet = new Set(
+      techCsv
+        .split(",")
+        .map((item) => item.trim().toLowerCase())
+        .filter(Boolean)
+    );
+
+    if (editProjectId) editProjectId.value = target.dataset.id || "";
+    if (editProjectName) editProjectName.value = target.dataset.name || "";
+    if (editStartDate) editStartDate.value = target.dataset.start || "";
+    if (editEndDate) editEndDate.value = target.dataset.end || "";
+    if (editDescription) editDescription.value = target.dataset.description || "";
+
+    editTechCheckboxes.forEach((checkbox) => {
+      const value = String(checkbox.value || "").toLowerCase();
+      checkbox.checked = techSet.has(value);
+    });
+
+    editModal.show();
   });
 }
 
