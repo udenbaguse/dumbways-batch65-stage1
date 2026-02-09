@@ -97,28 +97,54 @@ if (editModalEl && rootContainer) {
   rootContainer.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (!target.classList.contains("btn-edit")) return;
+    if (target.classList.contains("btn-edit")) {
+      const techCsv = target.dataset.tech || "";
+      const techSet = new Set(
+        techCsv
+          .split(",")
+          .map((item) => item.trim().toLowerCase())
+          .filter(Boolean)
+      );
 
-    const techCsv = target.dataset.tech || "";
-    const techSet = new Set(
-      techCsv
-        .split(",")
-        .map((item) => item.trim().toLowerCase())
-        .filter(Boolean)
-    );
+      if (editProjectId) editProjectId.value = target.dataset.id || "";
+      if (editProjectName) editProjectName.value = target.dataset.name || "";
+      if (editStartDate) editStartDate.value = target.dataset.start || "";
+      if (editEndDate) editEndDate.value = target.dataset.end || "";
+      if (editDescription) editDescription.value = target.dataset.description || "";
 
-    if (editProjectId) editProjectId.value = target.dataset.id || "";
-    if (editProjectName) editProjectName.value = target.dataset.name || "";
-    if (editStartDate) editStartDate.value = target.dataset.start || "";
-    if (editEndDate) editEndDate.value = target.dataset.end || "";
-    if (editDescription) editDescription.value = target.dataset.description || "";
+      editTechCheckboxes.forEach((checkbox) => {
+        const value = String(checkbox.value || "").toLowerCase();
+        checkbox.checked = techSet.has(value);
+      });
 
-    editTechCheckboxes.forEach((checkbox) => {
-      const value = String(checkbox.value || "").toLowerCase();
-      checkbox.checked = techSet.has(value);
-    });
+      editModal.show();
+      return;
+    }
 
-    editModal.show();
+    if (target.classList.contains("btn-delete")) {
+      const projectId = target.dataset.id;
+      if (!projectId) return;
+      if (!window.confirm("Hapus project ini?")) return;
+
+      (async () => {
+        try {
+          const response = await fetch(`/projects/${projectId}`, {
+            method: "DELETE",
+          });
+          const result = await response.json();
+          if (!response.ok || !result.success) {
+            throw new Error(result.message || "Failed to delete project.");
+          }
+          window.location.reload();
+        } catch (error) {
+          showAlert({
+            alertBox,
+            type: "danger",
+            message: `<strong>Failed!</strong> ${error.message}`,
+          });
+        }
+      })();
+    }
   });
 
   if (saveChangesBtn) {

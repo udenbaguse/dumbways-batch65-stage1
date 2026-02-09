@@ -277,6 +277,57 @@ export const updateProject = async (req, res) => {
   }
 };
 
+export const deleteProject = async (req, res) => {
+  const projectId = Number(req.params.id || 0);
+  if (!projectId) {
+    return res.status(400).json({
+      success: false,
+      message: "ID project tidak valid.",
+    });
+  }
+
+  const client = await db.connect();
+  try {
+    await client.query("BEGIN");
+
+    await client.query(
+      `
+      DELETE FROM project_technologies
+      WHERE project_id = $1
+      `,
+      [projectId]
+    );
+
+    const result = await client.query(
+      `
+      DELETE FROM projects
+      WHERE id = $1
+      `,
+      [projectId]
+    );
+
+    await client.query("COMMIT");
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Project tidak ditemukan.",
+      });
+    }
+
+    return res.json({ success: true });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Failed to delete project:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Gagal menghapus project.",
+    });
+  } finally {
+    client.release();
+  }
+};
+
 export const renderProjectDetail = async (req, res) => {
   const projectId = Number(req.params.id || 0);
   if (!projectId) {
