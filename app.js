@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -23,6 +24,8 @@ app.engine(
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src/views"));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/", pageRoutes);
 

@@ -5,12 +5,14 @@ import {
   renderNotFound,
   renderProjectDetail,
   renderProjects,
+  createProject,
 } from "../controllers/pageController.js";
 
 const router = Router();
 
 router.get("/", renderHome);
 router.get("/projects", renderProjects);
+router.post("/projects", createProject);
 router.get("/project-detail", renderProjectDetail);
 router.get("/contact", renderContact);
 
