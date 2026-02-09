@@ -41,6 +41,20 @@ export const renderProjects = async (req, res) => {
         row.image || "https://via.placeholder.com/800x400?text=Project+Image",
       technologies: row.technologies || [],
       techList: (row.technologies || []).join(", "),
+      startDateFormatted: row.start_date
+        ? new Intl.DateTimeFormat("id-ID", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(row.start_date))
+        : "",
+      endDateFormatted: row.end_date
+        ? new Intl.DateTimeFormat("id-ID", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(row.end_date))
+        : "",
     }));
 
     renderPage(res, "my-projects", "My Projects", {
