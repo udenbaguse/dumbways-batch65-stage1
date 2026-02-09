@@ -1,4 +1,4 @@
-import db from "../db.js";
+import db from "../db/index.js";
 
 const renderPage = (res, view, title, options = {}) => {
   res.render(view, { title, ...options });
@@ -18,7 +18,7 @@ export const renderProjects = async (req, res) => {
         p.start_date,
         p.end_date,
         p.description,
-        p.image_path,
+        p.image,
         COALESCE(
           ARRAY_AGG(t.name ORDER BY t.name) FILTER (WHERE t.name IS NOT NULL),
           '{}'
@@ -38,8 +38,7 @@ export const renderProjects = async (req, res) => {
       endDate: row.end_date,
       description: row.description,
       image:
-        row.image_path ||
-        "https://via.placeholder.com/800x400?text=Project+Image",
+        row.image || "https://via.placeholder.com/800x400?text=Project+Image",
       technologies: row.technologies || [],
       techList: (row.technologies || []).join(", "),
     }));
@@ -69,8 +68,12 @@ export const createProject = async (req, res) => {
     : typeof technologies === "string" && technologies.length > 0
       ? [technologies]
       : [];
+  const normalizedTechList = techList
+    .map((tech) => String(tech || "").trim())
+    .filter(Boolean)
+    .map((tech) => tech.toLowerCase());
 
-  if (!trimmedName || !startDate || !endDate || techList.length === 0) {
+  if (!trimmedName || !startDate || !endDate || normalizedTechList.length === 0) {
     return res.status(400).json({
       success: false,
       message: "Field wajib belum lengkap.",
@@ -92,9 +95,9 @@ export const createProject = async (req, res) => {
     const insertProject = await client.query(
       `
       INSERT INTO projects
-        (user_id, name, start_date, end_date, description, image_path)
+        (user_id, name, start_date, end_date, description, image, created_at, updated_at)
       VALUES
-        ($1, $2, $3, $4, $5, $6)
+        ($1, $2, $3, $4, $5, $6, NOW(), NOW())
       RETURNING id
       `,
       [
@@ -109,17 +112,17 @@ export const createProject = async (req, res) => {
 
     const projectId = insertProject.rows[0].id;
 
-    if (techList.length > 0) {
+    if (normalizedTechList.length > 0) {
       const techRows = await client.query(
         `
         SELECT id, name
         FROM technologies
-        WHERE name = ANY($1)
+        WHERE LOWER(name) = ANY($1)
         `,
-        [techList]
+        [normalizedTechList]
       );
 
-      if (techRows.rows.length !== techList.length) {
+      if (techRows.rows.length !== normalizedTechList.length) {
         throw new Error("Beberapa teknologi tidak ditemukan di database.");
       }
 
