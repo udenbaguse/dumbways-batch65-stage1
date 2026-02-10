@@ -27,10 +27,16 @@
         <li class="nav-item"><a class="nav-link {{#if isProjects}}active{{/if}}" href="/projects">My Project</a></li>
       </ul>
 
-      <div class="d-flex"><a
+      <div class="d-flex align-items-center gap-2">
+        <a
           href="/contact"
-          class="btn btn-primary w-100 {{#if isContact}}fw-bold{{/if}}"
-        >Contact Me</a></div>
+          class="btn btn-primary {{#if isContact}}fw-bold{{/if}}"
+        >Contact Me</a>
+        {{#if user}}
+          <span class="text-light small">Hi, {{user.fullName}}</span>
+          <a href="/logout" class="btn btn-outline-light">Logout</a>
+        {{/if}}
+      </div>
     </div>
   </div>
 </nav>

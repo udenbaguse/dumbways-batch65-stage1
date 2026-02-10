@@ -1,12 +1,12 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
+import session from "express-session";
 import { engine } from "express-handlebars";
 import pageRoutes from "./src/routes/pageRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = import.meta.dirname
 
 const app = express();
 const port = 3000;
@@ -53,7 +53,19 @@ app.set("views", path.join(__dirname, "src/views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "change-this-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use((req, res, next) => {
+  res.locals.user = req.session?.user || null;
+  next();
+});
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/", authRoutes);
 app.use("/", pageRoutes);
 
 app.listen(port, () => {

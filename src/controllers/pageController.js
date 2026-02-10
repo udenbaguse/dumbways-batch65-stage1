@@ -100,11 +100,11 @@ export const createProject = async (req, res) => {
     });
   }
 
-  const defaultUserId = Number(process.env.DEFAULT_USER_ID || 0);
-  if (!defaultUserId) {
+  const sessionUserId = Number(req.session?.user?.id || 0);
+  if (!sessionUserId) {
     return res.status(500).json({
       success: false,
-      message: "DEFAULT_USER_ID belum diset di .env.",
+      message: "User belum login.",
     });
   }
 
@@ -121,7 +121,7 @@ export const createProject = async (req, res) => {
       RETURNING id
       `,
       [
-        defaultUserId,
+        sessionUserId,
         trimmedName,
         startDate,
         endDate,

@@ -1,0 +1,39 @@
+<div class="container mt-5" style="max-width: 480px;">
+  <h2 class="mb-4 text-center">Login</h2>
+
+  {{#if error}}
+    <div class="alert alert-danger text-center">{{error}}</div>
+  {{/if}}
+
+  <form method="POST" action="/login" class="card p-4 shadow-sm">
+    <div class="mb-3">
+      <label for="identifier" class="form-label">Username / Email</label>
+      <input
+        type="text"
+        class="form-control"
+        id="identifier"
+        name="identifier"
+        placeholder="Masukkan username atau email"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Masukkan password"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+  </form>
+
+  <p class="text-center mt-3 mb-0">
+    Belum punya akun? <a href="/register">Daftar di sini</a>
+  </p>
+</div>
