@@ -1,5 +1,8 @@
-<div class="container mt-5" style="max-width: 480px;">
-  <h2 class="mb-4 text-center">Login</h2>
+<div class="container mt-5" style="max-width: 520px;">
+  <div class="text-center mb-4">
+    <h2 class="mb-1">Login</h2>
+    <p class="text-muted mb-0">Masuk untuk mengelola project kamu.</p>
+  </div>
 
   {{#if error}}
     <div class="alert alert-danger text-center">{{error}}</div>
@@ -14,6 +17,7 @@
         id="identifier"
         name="identifier"
         placeholder="Masukkan username atau email"
+        value="{{values.identifier}}"
         required
       />
     </div>

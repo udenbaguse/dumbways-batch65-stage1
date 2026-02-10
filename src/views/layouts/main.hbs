@@ -29,6 +29,13 @@
     {{> navbar}}
 
     <div id="alertBox" class="alert d-none text-center" role="alert"></div>
+    {{#if flash}}
+      <div class="container mt-3">
+        <div class="alert alert-{{flash.type}} text-center" role="alert">
+          {{flash.message}}
+        </div>
+      </div>
+    {{/if}}
 
     {{{body}}}
 

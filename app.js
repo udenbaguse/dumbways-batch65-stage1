@@ -53,15 +53,27 @@ app.set("views", path.join(__dirname, "src/views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const isProduction = process.env.NODE_ENV === "production";
 app.use(
   session({
+    name: "session_id",
     secret: process.env.SESSION_SECRET || "change-this-secret",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: isProduction,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
   })
 );
 app.use((req, res, next) => {
   res.locals.user = req.session?.user || null;
+  res.locals.flash = req.session?.flash || null;
+  if (req.session?.flash) {
+    delete req.session.flash;
+  }
   next();
 });
 app.use(express.static(path.join(__dirname, "public")));
