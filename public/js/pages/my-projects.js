@@ -12,6 +12,7 @@ const startInput = document.getElementById("startDate");
 const endInput = document.getElementById("endDate");
 const descriptionInput = document.getElementById("description");
 const imageInput = document.getElementById("uploadImage");
+const imagePreview = document.getElementById("imagePreview");
 const editModalEl = document.getElementById("editProjectModal");
 const editProjectId = document.getElementById("editProjectId");
 const editProjectName = document.getElementById("editProjectName");
@@ -20,6 +21,7 @@ const editEndDate = document.getElementById("editEndDate");
 const editDescription = document.getElementById("editDescription");
 const editTechCheckboxes = document.querySelectorAll(".edit-tech-checkbox");
 const editUploadImage = document.getElementById("editUploadImage");
+const editImagePreview = document.getElementById("editImagePreview");
 const saveChangesBtn = document.getElementById("saveChangesBtn");
 const rootContainer = document.getElementById("root");
 const confirmUpdateModalEl = document.getElementById("confirmUpdateModal");
@@ -31,6 +33,19 @@ const confirmDeleteNoBtn = document.getElementById("confirmDeleteNoBtn");
 
 if (container && submitBtn) {
   setupRealtimeValidation(container);
+
+  if (imageInput && imagePreview) {
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files?.[0];
+      if (!file) {
+        imagePreview.src = "";
+        imagePreview.classList.add("d-none");
+        return;
+      }
+      imagePreview.src = URL.createObjectURL(file);
+      imagePreview.classList.remove("d-none");
+    });
+  }
 
   submitBtn.addEventListener("click", async () => {
     const formValid = validateForm(container);
@@ -53,21 +68,20 @@ if (container && submitBtn) {
       .filter((cb) => cb.checked)
       .map((cb) => cb.value);
 
-    const payload = {
-      name: nameInput?.value || "",
-      startDate: startInput?.value || "",
-      endDate: endInput?.value || "",
-      description: descriptionInput?.value || "",
-      technologies: selectedTechs,
-      imagePath: imageInput?.value || "",
-    };
+    const formData = new FormData();
+    formData.append("name", nameInput?.value || "");
+    formData.append("startDate", startInput?.value || "");
+    formData.append("endDate", endInput?.value || "");
+    formData.append("description", descriptionInput?.value || "");
+    selectedTechs.forEach((tech) => formData.append("technologies", tech));
+    const file = imageInput?.files?.[0];
+    if (file) formData.append("image", file);
 
     try {
       submitBtn.disabled = true;
       const response = await fetch("/projects", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const result = await response.json();
@@ -121,10 +135,21 @@ if (editModalEl && rootContainer) {
       );
 
       if (editProjectId) editProjectId.value = target.dataset.id || "";
+      if (editUploadImage) editUploadImage.value = "";
       if (editProjectName) editProjectName.value = target.dataset.name || "";
       if (editStartDate) editStartDate.value = target.dataset.start || "";
       if (editEndDate) editEndDate.value = target.dataset.end || "";
       if (editDescription) editDescription.value = target.dataset.description || "";
+      const existingImage = target.dataset.image || "";
+      if (editImagePreview) {
+        if (existingImage) {
+          editImagePreview.src = existingImage;
+          editImagePreview.classList.remove("d-none");
+        } else {
+          editImagePreview.src = "";
+          editImagePreview.classList.add("d-none");
+        }
+      }
 
       editTechCheckboxes.forEach((checkbox) => {
         const value = String(checkbox.value || "").toLowerCase();
@@ -160,10 +185,22 @@ if (editModalEl && rootContainer) {
         endDate: editEndDate?.value || "",
         description: editDescription?.value || "",
         technologies: selectedTechs,
-        imagePath: editUploadImage?.value || "",
+        existingImage: document
+          .querySelector(`.btn-edit[data-id="${projectId}"]`)
+          ?.dataset.image || "",
+        imageFile: editUploadImage?.files?.[0] || null,
       };
 
       if (confirmUpdateModal) confirmUpdateModal.show();
+    });
+  }
+
+  if (editUploadImage && editImagePreview) {
+    editUploadImage.addEventListener("change", () => {
+      const file = editUploadImage.files?.[0];
+      if (!file) return;
+      editImagePreview.src = URL.createObjectURL(file);
+      editImagePreview.classList.remove("d-none");
     });
   }
 
@@ -181,10 +218,23 @@ if (editModalEl && rootContainer) {
 
       try {
         confirmYesBtn.disabled = true;
+        const formData = new FormData();
+        formData.append("name", payload.name || "");
+        formData.append("startDate", payload.startDate || "");
+        formData.append("endDate", payload.endDate || "");
+        formData.append("description", payload.description || "");
+        (payload.technologies || []).forEach((tech) =>
+          formData.append("technologies", tech)
+        );
+        if (payload.existingImage) {
+          formData.append("existingImage", payload.existingImage);
+        }
+        if (payload.imageFile) {
+          formData.append("image", payload.imageFile);
+        }
         const response = await fetch(`/projects/${projectId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: formData,
         });
 
         const result = await response.json();

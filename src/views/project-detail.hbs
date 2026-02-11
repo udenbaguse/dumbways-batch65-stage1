@@ -2,7 +2,9 @@
   {{#if dbError}}
     <div class="alert alert-danger">Gagal memuat detail project.</div>
   {{else if notFound}}
-    <div class="alert alert-warning">Project tidak ditemukan.</div>
+    <div class="alert alert-warning">
+      Project not found. It may have been deleted or does not belong to your account.
+    </div>
   {{else}}
     <h1 class="mb-4">{{project.name}}</h1>
 

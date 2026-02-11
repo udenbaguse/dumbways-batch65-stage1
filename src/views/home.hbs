@@ -1,54 +1,102 @@
-<div class="position-relative vh-100">
-  <div
-    class="container position-absolute top-50 start-50 translate-middle text-bg-dark rounded-5 p-4 d-flex flex-wrap align-items-center card_max_width card_box_shadow"
-  >
-    <div class="order-1 text-center mt-5 mt-md-0 card_image_grow_shrink_basis">
-      <img
-        src="https://ik.imagekit.io/udenbaguse/photo-profile.jpg"
-        alt="Muhamad Syamsudin"
-        width="200px"
-        class="rounded-circle border_img"
-      />
-      <p
-        class="h5 fw-bold mt-3 text-opacity-50 text-white font_playfair"
-      >Muhamad Syamsudin</p>
-    </div>
-
-    <div
-      class="d-flex flex-column justify-content-center align-items-center gap-2 text-md-start pe-2 card_content_grow_shrink_basis"
-    >
-      <h2 class="text-danger-emphasis font_railway">Hello World</h2>
-      <p class="lh-md text-start font_ns_georgian">My name is Syam, I'm
-        currently studying at Dumbways Batch 65. I want to be a Fullstack Web
-        Developer.</p>
-
-      <div class="btn-group">
-        <a href="/contact" class="btn btn-outline-info">Contact Me</a>
-        <a
-          href="/cv.pdf"
-          download="cv.pdf"
-          class="btn btn-outline-warning"
-        >Download CV</a>
-      </div>
-
-      <div class="mt-3 social_icons">
-        <a href="https://www.youtube.com/@Udenbaguse"><i
-            class="fa-brands fa-youtube fa-beat"
-            style="color: #e42a2a;"
-          ></i></a>
-        <a href="https://www.instagram.com/u_denbaguse/"><i
-            class="fa-brands fa-instagram fa-fade"
-            style="color: #df614e;"
-          ></i></a>
-        <a href=""><i
-            class="fa-brands fa-whatsapp fa-shake"
-            style="color: #7ee87d;"
-          ></i></a>
-        <a href=""><i
-            class="fa-brands fa-linkedin fa-bounce"
-            style="color: #2c9cf2;"
-          ></i></a>
+<section class="home-hero py-5">
+  <div class="container">
+    <div class="home-hero-card">
+      <div class="home-hero-grid">
+        <div class="home-hero-copy">
+          <span class="badge text-bg-light mb-3">Personal Project Manager</span>
+          <h1 class="display-5 fw-bold font_railway">Keep your projects organized.</h1>
+          <p class="lead text-light-emphasis mt-3">
+            Store, track, and showcase your personal projects from one simple hub.
+            Everything lives in <strong>Project</strong>.
+          </p>
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="/projects" class="btn btn-primary">Open My Project</a>
+            <a href="/register" class="btn btn-outline-primary">Create Account</a>
+          </div>
+          <div class="home-hero-meta">
+            <span>Private</span>
+            <span>Fast</span>
+            <span>Simple</span>
+          </div>
+        </div>
+        <div class="home-hero-visual" aria-hidden="true">
+          <svg viewBox="0 0 360 300" role="img">
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.8" />
+              </linearGradient>
+            </defs>
+            <rect x="24" y="32" width="312" height="220" rx="18" fill="url(#grad)" opacity="0.2" />
+            <rect x="56" y="64" width="120" height="18" rx="9" fill="#e2e8f0" opacity="0.9" />
+            <rect x="56" y="92" width="180" height="10" rx="5" fill="#94a3b8" opacity="0.7" />
+            <rect x="56" y="118" width="150" height="10" rx="5" fill="#94a3b8" opacity="0.7" />
+            <rect x="56" y="150" width="248" height="60" rx="12" fill="#0f172a" opacity="0.55" />
+            <circle cx="280" cy="92" r="20" fill="#38bdf8" opacity="0.8" />
+            <circle cx="248" cy="128" r="8" fill="#22d3ee" opacity="0.9" />
+            <circle cx="290" cy="140" r="10" fill="#818cf8" opacity="0.9" />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4 font_railway">About Me</h2>
+    <div
+      class="about-card rounded-5 p-4 d-flex flex-wrap align-items-center card_max_width card_box_shadow about-card-animate mx-auto"
+    >
+      <div class="order-1 text-center mt-5 mt-md-0 card_image_grow_shrink_basis">
+        <img
+          src="https://ik.imagekit.io/udenbaguse/photo-profile.jpg"
+          alt="Muhamad Syamsudin"
+          width="200px"
+          class="rounded-circle border_img"
+        />
+        <p
+          class="h5 fw-bold mt-3 text-muted font_playfair"
+        >Muhamad Syamsudin</p>
+      </div>
+
+      <div
+        class="d-flex flex-column justify-content-center align-items-center gap-2 text-md-start pe-2 card_content_grow_shrink_basis"
+      >
+        <h2 class="text-danger-emphasis font_railway">Hello World</h2>
+        <p class="lh-md text-start font_ns_georgian">
+          My name is Syam, I'm currently studying at Dumbways Batch 65. I want
+          to be a Fullstack Web Developer.
+        </p>
+
+        <div class="btn-group">
+          <a href="/contact" class="btn btn-outline-info">Contact Me</a>
+          <a
+            href="/cv.pdf"
+            download="cv.pdf"
+            class="btn btn-outline-warning"
+          >Download CV</a>
+        </div>
+
+        <div class="mt-3 social_icons">
+          <a href="https://www.youtube.com/@Udenbaguse"><i
+              class="fa-brands fa-youtube fa-beat"
+              style="color: #e42a2a;"
+            ></i></a>
+          <a href="https://www.instagram.com/u_denbaguse/"><i
+              class="fa-brands fa-instagram fa-fade"
+              style="color: #df614e;"
+            ></i></a>
+          <a href=""><i
+              class="fa-brands fa-whatsapp fa-shake"
+              style="color: #7ee87d;"
+            ></i></a>
+          <a href=""><i
+              class="fa-brands fa-linkedin fa-bounce"
+              style="color: #2c9cf2;"
+            ></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

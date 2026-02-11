@@ -1,7 +1,19 @@
+import fs from "fs";
+import path from "path";
 import db from "../db/index.js";
 
 const renderPage = (res, view, title, options = {}) => {
   res.render(view, { title, ...options });
+};
+
+const removeUploadIfExists = (imagePath) => {
+  if (!imagePath || typeof imagePath !== "string") return;
+  if (!imagePath.startsWith("/uploads/")) return;
+  const relativePath = imagePath.replace(/^\/+/, "");
+  const fullPath = path.join(process.cwd(), "public", relativePath);
+  if (fs.existsSync(fullPath)) {
+    fs.unlinkSync(fullPath);
+  }
 };
 
 export const renderHome = (req, res) => {
@@ -9,6 +21,10 @@ export const renderHome = (req, res) => {
 };
 
 export const renderProjects = async (req, res) => {
+  const sessionUserId = Number(req.session?.user?.id || 0);
+  if (!sessionUserId) {
+    return res.redirect("/login");
+  }
   try {
     const result = await db.query(
       `
@@ -26,9 +42,11 @@ export const renderProjects = async (req, res) => {
       FROM projects p
       LEFT JOIN project_technologies pt ON pt.project_id = p.id
       LEFT JOIN technologies t ON t.id = pt.technology_id
+      WHERE p.user_id = $1
       GROUP BY p.id
       ORDER BY p.created_at DESC
-      `
+      `,
+      [sessionUserId]
     );
 
     const projects = result.rows.map((row) => ({
@@ -79,8 +97,8 @@ export const renderProjects = async (req, res) => {
 };
 
 export const createProject = async (req, res) => {
-  const { name, startDate, endDate, description, technologies, imagePath } =
-    req.body || {};
+  const { name, startDate, endDate, description, technologies } = req.body || {};
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const trimmedName = String(name || "").trim();
   const trimmedDescription = String(description || "").trim();
@@ -126,7 +144,7 @@ export const createProject = async (req, res) => {
         startDate,
         endDate,
         trimmedDescription || null,
-        imagePath || null,
+        imagePath,
       ]
     );
 
@@ -181,9 +199,19 @@ export const updateProject = async (req, res) => {
       message: "ID project tidak valid.",
     });
   }
+  const sessionUserId = Number(req.session?.user?.id || 0);
+  if (!sessionUserId) {
+    return res.status(401).json({
+      success: false,
+      message: "User belum login.",
+    });
+  }
 
-  const { name, startDate, endDate, description, technologies, imagePath } =
+  const { name, startDate, endDate, description, technologies, existingImage } =
     req.body || {};
+  const imagePath = req.file
+    ? `/uploads/${req.file.filename}`
+    : existingImage || null;
 
   const trimmedName = String(name || "").trim();
   const trimmedDescription = String(description || "").trim();
@@ -207,7 +235,7 @@ export const updateProject = async (req, res) => {
   try {
     await client.query("BEGIN");
 
-    await client.query(
+    const updateResult = await client.query(
       `
       UPDATE projects
       SET name = $1,
@@ -216,7 +244,7 @@ export const updateProject = async (req, res) => {
           description = $4,
           image = $5,
           updated_at = NOW()
-      WHERE id = $6
+      WHERE id = $6 AND user_id = $7
       `,
       [
         trimmedName,
@@ -225,8 +253,17 @@ export const updateProject = async (req, res) => {
         trimmedDescription || null,
         imagePath || null,
         projectId,
+        sessionUserId,
       ]
     );
+
+    if (updateResult.rowCount === 0) {
+      throw new Error("Project tidak ditemukan atau bukan milikmu.");
+    }
+
+    if (req.file && existingImage) {
+      removeUploadIfExists(existingImage);
+    }
 
     await client.query(
       `
@@ -283,10 +320,43 @@ export const deleteProject = async (req, res) => {
       message: "ID project tidak valid.",
     });
   }
+  const sessionUserId = Number(req.session?.user?.id || 0);
+  if (!sessionUserId) {
+    return res.status(401).json({
+      success: false,
+      message: "User belum login.",
+    });
+  }
 
   const client = await db.connect();
   try {
     await client.query("BEGIN");
+
+    const ownership = await client.query(
+      `
+      SELECT id
+      FROM projects
+      WHERE id = $1 AND user_id = $2
+      `,
+      [projectId, sessionUserId]
+    );
+
+    if (ownership.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({
+        success: false,
+        message: "Project tidak ditemukan.",
+      });
+    }
+
+    const imageResult = await client.query(
+      `
+      SELECT image
+      FROM projects
+      WHERE id = $1 AND user_id = $2
+      `,
+      [projectId, sessionUserId]
+    );
 
     await client.query(
       `
@@ -299,9 +369,9 @@ export const deleteProject = async (req, res) => {
     const result = await client.query(
       `
       DELETE FROM projects
-      WHERE id = $1
+      WHERE id = $1 AND user_id = $2
       `,
-      [projectId]
+      [projectId, sessionUserId]
     );
 
     await client.query("COMMIT");
@@ -311,6 +381,11 @@ export const deleteProject = async (req, res) => {
         success: false,
         message: "Project tidak ditemukan.",
       });
+    }
+
+    const imagePath = imageResult.rows[0]?.image;
+    if (imagePath) {
+      removeUploadIfExists(imagePath);
     }
 
     return res.json({ success: true });
@@ -335,6 +410,10 @@ export const renderProjectDetail = async (req, res) => {
       dbError: true,
     });
   }
+  const sessionUserId = Number(req.session?.user?.id || 0);
+  if (!sessionUserId) {
+    return res.redirect("/login");
+  }
 
   try {
     const result = await db.query(
@@ -353,10 +432,10 @@ export const renderProjectDetail = async (req, res) => {
       FROM projects p
       LEFT JOIN project_technologies pt ON pt.project_id = p.id
       LEFT JOIN technologies t ON t.id = pt.technology_id
-      WHERE p.id = $1
+      WHERE p.id = $1 AND p.user_id = $2
       GROUP BY p.id
       `,
-      [projectId]
+      [projectId, sessionUserId]
     );
 
     if (result.rows.length === 0) {

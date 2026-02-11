@@ -17,7 +17,7 @@ Features include project CRUD, detail page, and tech icons using Devicon.
 - Bootstrap 5
 
 ## Requirements
-- Node.js >= 18
+- Node.js >= 20
 - PostgreSQL + pgAdmin
 
 ## Setup
@@ -28,12 +28,12 @@ npm install
 
 2. Create `.env` in project root
 ```
-DB_HOST=localhost
-DB_PORT=5432
+DB_HOST=...
+DB_PORT=...
 DB_NAME=personal-web-65
-DB_USER=postgres
-DB_PASSWORD=root
-DEFAULT_USER_ID=1
+DB_USER=...
+DB_PASSWORD=...
+DEFAULT_USER_ID=...
 ```
 
 3. Run the app
@@ -71,5 +71,4 @@ Example `technologies.icon_html` value:
 - `npm run dev` Start dev server with nodemon
 
 ## Notes
-- Image upload is not implemented yet. `image` is stored as URL/string.
-- If you see foreign key errors, ensure `DEFAULT_USER_ID` exists in `users`.
+finish daily task dumbways batch 65 stage 1 personal web app
