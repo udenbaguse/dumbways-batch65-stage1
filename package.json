@@ -17,11 +17,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "clean:uploads": "node scripts/clean-orphan-uploads.js",
-    "clean:uploads:dry": "node scripts/clean-orphan-uploads.js --dry-run"
+    "clean:uploads": "node node_modules/clean-orphan-uploads-cli/bin/clean-orphan-uploads.js",
+    "clean:uploads:dry": "node node_modules/clean-orphan-uploads-cli/bin/clean-orphan-uploads.js --dry-run"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "clean-orphan-uploads-cli": "github:udenbaguse/clean-orphan-uploads-cli",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "express-handlebars": "^7.1.3",

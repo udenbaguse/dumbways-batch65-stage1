@@ -69,6 +69,22 @@ Example `technologies.icon_html` value:
 
 ## Scripts
 - `npm run dev` Start dev server with nodemon
+- `npm run clean:uploads` Remove orphan upload files
+- `npm run clean:uploads:dry` Preview orphan files without deleting
 
 ## Notes
 finish daily task dumbways batch 65 stage 1 personal web app
+
+## Separate Package (Upload Cleaner)
+This repo now includes a reusable CLI package at:
+
+- `packages/clean-orphan-uploads-cli`
+
+You can move that folder to its own repository and publish it separately.
+
+Local run examples:
+
+```bash
+node packages/clean-orphan-uploads-cli/bin/clean-orphan-uploads.js --dry-run
+node packages/clean-orphan-uploads-cli/bin/clean-orphan-uploads.js --uploads-dir public/uploads
+```
