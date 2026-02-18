@@ -349,15 +349,6 @@ export const deleteProject = async (req, res) => {
       });
     }
 
-    const imageResult = await client.query(
-      `
-      SELECT image
-      FROM projects
-      WHERE id = $1 AND user_id = $2
-      `,
-      [projectId, sessionUserId]
-    );
-
     await client.query(
       `
       DELETE FROM project_technologies
@@ -381,11 +372,6 @@ export const deleteProject = async (req, res) => {
         success: false,
         message: "Project tidak ditemukan.",
       });
-    }
-
-    const imagePath = imageResult.rows[0]?.image;
-    if (imagePath) {
-      removeUploadIfExists(imagePath);
     }
 
     return res.json({ success: true });
